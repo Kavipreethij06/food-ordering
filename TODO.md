@@ -11,13 +11,13 @@
   - Push to Azure Container Registry (ACR)
   - Deploy to Azure Kubernetes Service (AKS) using kubectl
   - Include deployment verification (kubectl get pods, svc)
-- [ ] Set up GitHub Secrets for ACR login (ACR_USERNAME, ACR_PASSWORD) and AKS kubeconfig (KUBE_CONFIG)
+- [ ] Set up GitHub Secrets for ACR login (ACR_USERNAME, ACR_PASSWORD) and AKS kubeconfig (KUBE_CONFIG) - Pipeline failed due to missing secrets
 
 ## Phase 6: Deployment and Validation
 - [x] Test Ansible playbook locally (Ansible installed but not executable on Windows; playbook ready for CI/CD)
 - [x] Test Docker build and run locally (successful, returns HTTP 200)
 - [x] Validate K8s manifests syntax (kubectl dry-run failed due to no cluster connection)
-- [ ] Verify deployment: Check pods and services in AKS (requires AKS access)
+- [ ] Verify deployment: Check pods and services in AKS (kubectl config not set locally; test via GitHub Actions)
 - [ ] Access the app via LoadBalancer public IP (after deployment)
 - [x] Update README.md with deployment instructions and phases completed
 
