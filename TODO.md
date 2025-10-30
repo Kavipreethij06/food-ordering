@@ -20,6 +20,7 @@
 - [ ] Verify deployment: Check pods and services in AKS (kubectl config not set locally; test via GitHub Actions)
 - [ ] Access the app via LoadBalancer public IP (after deployment)
 - [x] Update README.md with deployment instructions and phases completed
+- [x] Create completion_todo.md with steps to set up secrets and complete deployment
 
 ## General
 - [x] Ensure all files are committed and pushed to GitHub
