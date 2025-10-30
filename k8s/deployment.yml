@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: foodordering-deployment
+  labels:
+    app: foodordering
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: foodordering
+  template:
+    metadata:
+      labels:
+        app: foodordering
+    spec:
+      containers:
+      - name: foodordering
+        image: foodorder.azurecr.io/foodordering:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"

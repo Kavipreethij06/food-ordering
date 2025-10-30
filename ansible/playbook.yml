@@ -1,0 +1,28 @@
+---
+- name: Deploy Food Ordering App to Kubernetes
+  hosts: localhost
+  connection: local
+  tasks:
+    - name: Apply Kubernetes Deployment
+      command: kubectl apply -f k8s/deployment.yml
+      register: deploy_result
+      changed_when: "'created' in deploy_result.stdout or 'configured' in deploy_result.stdout"
+
+    - name: Apply Kubernetes Service
+      command: kubectl apply -f k8s/service.yml
+      register: svc_result
+      changed_when: "'created' in svc_result.stdout or 'configured' in svc_result.stdout"
+
+    - name: Wait for deployment to be ready
+      command: kubectl wait --for=condition=available --timeout=300s deployment/foodordering-deployment
+      register: wait_result
+      changed_when: false
+
+    - name: Get service external IP
+      command: kubectl get svc foodordering-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+      register: ip_result
+      changed_when: false
+
+    - name: Display external IP
+      debug:
+        msg: "Application is accessible at: http://{{ ip_result.stdout }}"

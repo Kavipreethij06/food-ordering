@@ -1,0 +1,73 @@
+name: CI/CD Pipeline for Food Ordering App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  REGISTRY: foodorder.azurecr.io
+  IMAGE_NAME: foodordering
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Log in to Azure Container Registry
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ env.REGISTRY }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+
+    - name: Build Docker image
+      run: docker build -t ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest .
+
+    - name: Push Docker image
+      run: docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+
+  deploy:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up kubectl
+      uses: azure/k8s-set-context@v3
+      with:
+        method: kubeconfig
+        kubeconfig: ${{ secrets.KUBE_CONFIG }}
+
+    - name: Deploy to AKS
+      run: |
+        kubectl apply -f k8s/deployment.yml
+        kubectl apply -f k8s/service.yml
+
+    - name: Wait for deployment
+      run: kubectl wait --for=condition=available --timeout=300s deployment/foodordering-deployment
+
+    - name: Verify deployment
+      run: |
+        kubectl get pods
+        kubectl get svc
+
+    - name: Get external IP
+      run: |
+        echo "Waiting for LoadBalancer IP..."
+        for i in {1..30}; do
+          IP=$(kubectl get svc foodordering-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}' 2>/dev/null)
+          if [ -n "$IP" ]; then
+            echo "Application deployed successfully! Access at: http://$IP"
+            break
+          fi
+          sleep 10
+        done
