@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: foodordering
-        image: foodorder.azurecr.io/foodordering:latest
+        image: foodordering:latest
         ports:
         - containerPort: 80
         resources:
