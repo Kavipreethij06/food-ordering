@@ -1,27 +1,17 @@
-# TODO for Food Order Website - Phases 4-6
+# TODO: Fix and Connect Kubernetes and CI/CD
 
-## Phase 4: Configuration Management
-- [x] Create k8s/deployment.yml: Kubernetes Deployment manifest for the foodordering app using ACR image
-- [x] Create k8s/service.yml: Kubernetes Service manifest with LoadBalancer type
-- [x] Create ansible/playbook.yml: Ansible playbook to deploy the K8s manifests using kubectl apply
+## Step 1: Update CI/CD Workflow
+- [ ] Update .github/workflows/ci-cd.yml to use modern GitHub Actions (replace deprecated azure/docker-login@v1 with docker/login-action@v3)
 
-## Phase 5: CI/CD Pipeline Setup
-- [x] Create .github/workflows/ci-cd.yml: GitHub Actions workflow to:
-  - Build Docker image on push
-  - Push to Azure Container Registry (ACR)
-  - Deploy to Azure Kubernetes Service (AKS) using kubectl
-  - Include deployment verification (kubectl get pods, svc)
-- [ ] Set up GitHub Secrets for ACR login (ACR_USERNAME, ACR_PASSWORD) and AKS kubeconfig (KUBE_CONFIG) - Pipeline failed due to missing secrets
+## Step 2: Validate Kubernetes Manifests
+- [ ] Validate k8s/deployment.yml syntax
+- [ ] Validate k8s/service.yml syntax
 
-## Phase 6: Deployment and Validation
-- [x] Test Ansible playbook locally (Ansible installed but not executable on Windows; playbook ready for CI/CD)
-- [x] Test Docker build and run locally (successful, returns HTTP 200)
-- [x] Validate K8s manifests syntax (kubectl dry-run failed due to no cluster connection)
-- [ ] Verify deployment: Check pods and services in AKS (kubectl config not set locally; test via GitHub Actions)
-- [ ] Access the app via LoadBalancer public IP (after deployment)
-- [x] Update README.md with deployment instructions and phases completed
-- [x] Create completion_todo.md with steps to set up secrets and complete deployment
+## Step 3: Provide Secret Setup Instructions
+- [ ] Update completion_todo.md with detailed steps for setting GitHub secrets (ACR_USERNAME, ACR_PASSWORD, KUBE_CONFIG)
 
-## General
-- [x] Ensure all files are committed and pushed to GitHub
-- [x] Test the full pipeline on a push event (fixed ACR login action)
+## Step 4: Test and Verify
+- [ ] Set up GitHub secrets as per instructions
+- [ ] Trigger CI/CD pipeline on push to main
+- [ ] Verify deployment: check pods, services, and access app via LoadBalancer IP
+- [ ] Update TODO.md to mark tasks as completed
